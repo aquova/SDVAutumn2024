@@ -1,0 +1,7 @@
+services:
+    autumn:
+        image: autumn:latest
+        restart: unless-stopped
+        container_name: autumn
+        volumes:
+            - ./src:/autumn
