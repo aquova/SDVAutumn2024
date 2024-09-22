@@ -19,7 +19,7 @@ class StoreWidget(discord.ui.Select):
             return
         idx = int(self.values[0])
         item = STORE[idx]
-        player = db.get_player(interaction.user.id)
+        player = db.get_player(interaction.user)
         if player.points < item['price']:
             await interaction.response.send_message(f"You only have {player.points}, you can't afford this!", ephemeral=True)
             return
@@ -30,7 +30,7 @@ class StoreWidget(discord.ui.Select):
         if role is None:
             raise AssertionError("Invalid role ID saved in config")
         await interaction.user.add_roles(role)
-        db.change_points(interaction.user.id, -1 * item['price'])
+        db.change_points(interaction.user, -1 * item['price'])
         await interaction.response.send_message(f"You are now the proud owner of the {item['name']} role and have {player.points - item['price']} points remaining. Enjoy!", ephemeral=True)
 
 class StoreView(discord.ui.View):

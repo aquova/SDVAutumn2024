@@ -8,12 +8,12 @@ from utils import Trick_Treat
 @client.tree.command(name="addpoints", description="Add/Remove points from users")
 @discord.app_commands.describe(user="User", delta="Points to add/remove")
 async def addpoints_slash(interaction: discord.Interaction, user: discord.Member, delta: int):
-    db.change_points(user.id, delta)
+    db.change_points(user, delta)
     await interaction.response.send_message(f"{delta} points have been given to {str(user)}", ephemeral=True)
 
 @client.tree.command(name="points", description="Show how many points you have")
 async def points_slash(interaction: discord.Interaction):
-    player = db.get_player(interaction.user.id)
+    player = db.get_player(interaction.user)
     await interaction.response.send_message(f"You have {player.points} points!", ephemeral=True)
 
 @client.tree.command(name="poststore", description="Post the event store")
@@ -24,15 +24,15 @@ async def poststore_slash(interaction: discord.Interaction, channel: discord.Tex
 
 @client.tree.command(name="stats", description="Get info about your Event stats")
 async def stats_slash(interaction: discord.Interaction):
-    player = db.get_player(interaction.user.id)
+    player = db.get_player(interaction.user)
     embed = discord.Embed(title=str(interaction.user), type="rich", color=interaction.user.color)
     embed.add_field(name="Points", value=player.points, inline=False)
     embed.add_field(name="Tricks Remaining", value=player.tricks_remaining)
     embed.add_field(name="Treats Remaining", value=player.treats_remaining)
     embed.add_field(name="Tricks Sent", value=player.tricks_sent)
     embed.add_field(name="Treats Sent", value=player.treats_sent)
-    embed.add_field(name="Tricks Received", value=player.tricks_hit)
-    embed.add_field(name="Treats Received", value=player.treats_hit)
+    embed.add_field(name="Tricks Received", value=player.tricks_received)
+    embed.add_field(name="Treats Received", value=player.treats_received)
     await interaction.response.send_message(embed=embed)
 
 @client.tree.context_menu(name="Send Trick")
@@ -59,7 +59,7 @@ def trick_treat_helper(interaction: discord.Interaction, target: discord.User | 
     word = "treat" if tot == Trick_Treat.TREAT else "trick"
     if interaction.user == target:
         return f"You can't send a {word} to yourself..."
-    if not db.has_tot(interaction.user.id, tot):
+    if not db.has_tot(interaction.user, tot):
         return f"You don't have any remaining {word}s to give!"
-    db.use_tot(interaction.user.id, target.id, tot)
+    db.use_tot(interaction.user, target, tot)
     return f"You sent {str(target)} a {word}!"

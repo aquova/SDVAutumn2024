@@ -12,5 +12,6 @@ services:
             - 443:443
         volumes:
             - ./html:/app/public
+            - ./src/private:/private
             - ./caddy/data:/data
             - ./caddy/config:/config
