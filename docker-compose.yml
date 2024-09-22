@@ -5,3 +5,12 @@ services:
         container_name: autumn
         volumes:
             - ./src:/autumn
+    php:
+        image: dunglas/frankenphp
+        ports:
+            - 8080:80
+            - 443:443
+        volumes:
+            - ./html:/app/public
+            - ./caddy/data:/data
+            - ./caddy/config:/config
