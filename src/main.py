@@ -4,14 +4,9 @@
 
 import discord
 
-import config
 from client import client
+from config import DISCORD_KEY, REDIRECT_CHANNELS
 
-"""
-On Ready
-
-Occurs when Discord bot is first brought online
-"""
 @client.event
 async def on_ready():
     print('Logged in as')
@@ -19,13 +14,20 @@ async def on_ready():
         print(client.user.name)
         print(client.user.id)
 
-"""
-On Guild Available
-
-Runs when a guild (server) becomes available to the bot
-"""
 @client.event
 async def on_guild_available(guild: discord.Guild):
     await client.sync_guild(guild)
 
-client.run(config.DISCORD_KEY)
+@client.event
+async def on_message(message: discord.Message):
+    if message.author == client.user:
+        return
+
+    if message.channel.id in REDIRECT_CHANNELS:
+        dest = REDIRECT_CHANNELS[message.channel.id]
+        channel = client.get_channel(dest)
+        if channel is not None:
+            await channel.send(message.content)
+            await message.delete()
+
+client.run(DISCORD_KEY)

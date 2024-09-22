@@ -7,11 +7,11 @@ class StoreItem(discord.SelectOption):
     def __init__(self, idx: int):
         item = STORE[idx]
         text = f"{item['name']} - {item['price']} points"
-        super().__init__(label=text, value=str(idx), default=False)
+        super().__init__(label=text, value=str(idx), emoji=item['emoji'], default=False)
 
 class StoreWidget(discord.ui.Select):
     def __init__(self):
-        options = [StoreItem(i) for i in range(0, len(STORE))]
+        options: list[discord.SelectOption] = [StoreItem(i) for i in range(0, len(STORE))]
         super().__init__(options=options)
 
     async def callback(self, interaction: discord.Interaction):
