@@ -2,16 +2,26 @@ services:
     autumn:
         image: autumn:latest
         restart: unless-stopped
-        container_name: autumn
         volumes:
             - ./src:/autumn
     php:
-        image: dunglas/frankenphp
-        ports:
-            - 8080:80
-            - 443:443
+        image: php:fpm-alpine
+        restart: unless-stopped
         volumes:
-            - ./html:/app/public
+            - ./html:/html
             - ./src/private:/private
-            - ./caddy/data:/data
-            - ./caddy/config:/config
+        networks:
+            - internal
+    web:
+        image: nginx:latest
+        restart: unless-stopped
+        ports:
+            - 48080:80
+        volumes:
+            - ./html:/html
+            - ./site.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - internal
+networks:
+    internal:
+        driver: bridge
