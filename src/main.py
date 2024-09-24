@@ -27,7 +27,10 @@ async def on_message(message: discord.Message):
         dest = REDIRECT_CHANNELS[message.channel.id]
         channel = client.get_channel(dest)
         if channel is not None:
-            await channel.send(message.content)
+            embed = discord.Embed(title=str(message.author), description=message.content)
+            if len(message.attachments) > 0:
+                embed.set_image(url=message.attachments[0].url)
+            await channel.send(embed=embed)
             await message.delete()
 
 client.run(DISCORD_KEY)
