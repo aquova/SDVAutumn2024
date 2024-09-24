@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>SDV Halloween Event 2024</title>
         <meta charset="utf-8">
@@ -10,9 +10,9 @@
     <body>
         <?php include 'leaderboard.php'; ?>
         <div class="title">
-            <img src="assets/leaf_emoji.webp">
+            <img src="assets/leaf_emoji.webp" alt="An emoji of a brown leaf">
             <h1 class="center">SDV Halloween Event 2024</h1>
-            <img src="assets/ghost_emoji.webp">
+            <img src="assets/ghost_emoji.webp" alt="An emoji of a pixel ghost">
         </div>
         <div id="leaderboard">
             <div id="container">
