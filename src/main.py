@@ -3,9 +3,12 @@
 # 2024
 
 import discord
+import requests
 
 from client import client
 from config import DISCORD_KEY, REDIRECT_CHANNELS
+
+FORWARD_URL = "https://0x0.st/"
 
 @client.event
 async def on_ready():
@@ -29,7 +32,9 @@ async def on_message(message: discord.Message):
         if channel is not None:
             embed = discord.Embed(title=str(message.author), description=message.content)
             if len(message.attachments) > 0:
-                embed.set_image(url=message.attachments[0].url)
+                new_url = requests.post(FORWARD_URL, data={"url": message.attachments[0].url})
+                if new_url.ok:
+                    embed.set_image(url=new_url.text)
             await channel.send(embed=embed)
             await message.delete()
 
