@@ -11,3 +11,4 @@ with open(CONFIG_PATH, 'r') as config_file:
 DISCORD_KEY = cfg['discord']
 STORE = cfg['store']
 REDIRECT_CHANNELS = cfg['channels']['redirect']
+EVENT_ROLES = cfg['roles']['event']
