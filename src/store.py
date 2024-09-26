@@ -7,7 +7,8 @@ class StoreItem(discord.SelectOption):
     def __init__(self, idx: int):
         item = STORE[idx]
         text = f"{item['name']} - {item['price']} points"
-        super().__init__(label=text, value=str(idx), emoji=item['emoji'], default=False)
+        emoji = item['emoji'] if 'emoji' in item else None
+        super().__init__(label=text, value=str(idx), emoji=emoji, default=False)
 
 class StoreWidget(discord.ui.Select):
     def __init__(self):
