@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 
 import db
+from store import StoreView
 
 class DiscordClient(commands.Bot):
     def __init__(self):
@@ -12,6 +13,7 @@ class DiscordClient(commands.Bot):
 
     async def sync_guild(self, guild: discord.Guild):
         import context
+        self.add_view(StoreView())
         self.tree.copy_global_to(guild=guild)
         await self.tree.sync(guild=guild)
 
