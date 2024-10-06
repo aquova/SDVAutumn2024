@@ -1,7 +1,8 @@
 import discord
 
+from approval import award_points
 from client import client
-from config import EVENT_ROLES, LEADERBOARD_URL
+from config import LEADERBOARD_URL
 import db
 from store import StoreView
 from utils import Trick_Treat
@@ -9,15 +10,7 @@ from utils import Trick_Treat
 @client.tree.command(name="addpoints", description="Add/Remove points from users")
 @discord.app_commands.describe(user="User", delta="Points to add/remove")
 async def addpoints_slash(interaction: discord.Interaction, user: discord.Member, delta: int):
-    db.change_points(user, delta)
-
-    # If they've received points, we'll consider them in the event and award the event roles
-    for role_id in EVENT_ROLES:
-        if not user.get_role(role_id):
-            role = discord.utils.get(interaction.user.guild.roles, id=role_id)
-            if role is not None:
-                await user.add_roles(role)
-
+    await award_points(user, delta, interaction.user.guild.roles)
     await interaction.response.send_message(f"{delta} points have been given to {str(user)}", ephemeral=True)
 
 @client.tree.command(name="leaderboard", description="Post the leaderboard for the event")

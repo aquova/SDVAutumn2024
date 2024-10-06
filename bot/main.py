@@ -3,12 +3,10 @@
 # 2024
 
 import discord
-import requests
 
+from approval import post_entry
 from client import client
 from config import DISCORD_KEY, REDIRECT_CHANNELS
-
-FORWARD_URL = "https://catbox.moe/user/api.php"
 
 @client.event
 async def on_ready():
@@ -30,14 +28,6 @@ async def on_message(message: discord.Message):
         dest = REDIRECT_CHANNELS[message.channel.id]
         channel = client.get_channel(dest)
         if channel is not None:
-            embed = discord.Embed(title=str(message.author), description=message.content)
-            if len(message.attachments) > 0:
-                new_url = requests.post(FORWARD_URL, data={"reqtype": "urlupload", "url": message.attachments[0].url})
-                if new_url.ok:
-                    embed.set_image(url=new_url.text)
-                else:
-                    print(f"Something went wrong: {new_url.text}")
-            await channel.send(embed=embed)
-            await message.delete()
+            await post_entry(message, channel)
 
 client.run(DISCORD_KEY)
