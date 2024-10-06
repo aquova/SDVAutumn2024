@@ -9,6 +9,7 @@ with open(CONFIG_PATH, 'r') as config_file:
 
 # Set values from config file as constants
 DISCORD_KEY = cfg['discord']
+LEADERBOARD_URL = cfg['leaderboard']
 STORE = cfg['store']
 REDIRECT_CHANNELS = cfg['channels']['redirect']
 EVENT_ROLES = cfg['roles']['event']

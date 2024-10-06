@@ -1,7 +1,7 @@
 import discord
 
 from client import client
-from config import EVENT_ROLES
+from config import EVENT_ROLES, LEADERBOARD_URL
 import db
 from store import StoreView
 from utils import Trick_Treat
@@ -19,6 +19,10 @@ async def addpoints_slash(interaction: discord.Interaction, user: discord.Member
                 await user.add_roles(role)
 
     await interaction.response.send_message(f"{delta} points have been given to {str(user)}", ephemeral=True)
+
+@client.tree.command(name="leaderboard", description="Post the leaderboard for the event")
+async def leaderboard_slash(interaction: discord.Interaction):
+    await interaction.response.send_message(f"The event leaderboard can be viewed here: {LEADERBOARD_URL}")
 
 @client.tree.command(name="points", description="Show how many points you have")
 async def points_slash(interaction: discord.Interaction):
