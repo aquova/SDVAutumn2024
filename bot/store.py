@@ -24,7 +24,7 @@ class StoreWidget(discord.ui.Select):
         item = STORE[idx]
         player = db.get_player(interaction.user)
         if player.points < item['price']:
-            await interaction.response.send_message(f"You only have {player.points}, you can't afford this!", ephemeral=True)
+            await interaction.response.send_message(f"You only have {player.points} points, you can't afford this!", ephemeral=True)
             return
         if interaction.user.get_role(item['role']):
             await interaction.response.send_message("You have already purchased that role!", ephemeral=True)
