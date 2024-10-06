@@ -11,9 +11,10 @@
         <?php include 'leaderboard.php'; ?>
         <div class="title">
             <img src="assets/leaf_emoji.webp" alt="An emoji of a brown leaf">
-            <h1 class="center">SDV Halloween Event 2024</h1>
+            <h1>SDV Halloween Event 2024</h1>
             <img src="assets/ghost_emoji.webp" alt="An emoji of a pixel ghost">
         </div>
+        <?php num_entries(); ?>
         <div id="leaderboard">
             <div id="container">
                 <div class="list">
