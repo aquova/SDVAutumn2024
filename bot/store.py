@@ -12,7 +12,7 @@ class StoreItem(discord.SelectOption):
 class StoreWidget(discord.ui.Select):
     def __init__(self):
         options: list[discord.SelectOption] = [StoreItem(i) for i in range(0, len(STORE))]
-        super().__init__(options=options)
+        super().__init__(custom_id="store_widget", options=options)
 
     async def callback(self, interaction: discord.Interaction):
         if isinstance(interaction.user, discord.User) or len(self.values) != 1:
@@ -35,5 +35,5 @@ class StoreWidget(discord.ui.Select):
 
 class StoreView(discord.ui.View):
     def __init__(self):
-        super().__init__()
+        super().__init__(timeout=None)
         self.add_item(StoreWidget())
