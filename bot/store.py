@@ -1,6 +1,5 @@
 import discord
 
-from client import client
 from config import STORE
 import db
 
@@ -8,9 +7,7 @@ class StoreItem(discord.SelectOption):
     def __init__(self, idx: int):
         item = STORE[idx]
         text = f"{item['name']} - {item['price']} points"
-        emoji_id: int = item['emoji'] if 'emoji' in item else None
-        emoji = client.get_emoji(emoji_id)
-        super().__init__(label=text, value=str(idx), emoji=emoji, default=False)
+        super().__init__(label=text, value=str(idx), default=False)
 
 class StoreWidget(discord.ui.Select):
     def __init__(self):
