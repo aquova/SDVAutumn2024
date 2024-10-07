@@ -33,6 +33,7 @@ def initialize():
     treats_received INTEGER DEFAULT 0)
     """
     sqlconn.execute(CREATION_QUERY)
+    sqlconn.execute("CREATE TABLE IF NOT EXISTS submissions (uid INTEGER, cid INTEGER, mid INTEGER, FOREIGN KEY(uid) REFERENCES players(uid) unique (cid, mid))")
     sqlconn.commit()
     sqlconn.close()
 
@@ -53,6 +54,11 @@ def _db_write(user: discord.User | discord.Member, query: tuple[str, list]):
     sqlconn.execute(*query)
     sqlconn.commit()
     sqlconn.close()
+
+def add_submission(message: discord.Message):
+    # TODO: Raise some error if entry already exists
+    query = ("INSERT INTO submissions (uid, cid, mid) VALUES (?, ?, ?)", [message.author.id, message.channel.id, message.id])
+    _db_write(message.author, query)
 
 def change_points(user: discord.User | discord.Member, delta: int):
     query = ("UPDATE players SET points = points + ? WHERE uid = ?", [delta, user.id])

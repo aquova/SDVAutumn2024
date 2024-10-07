@@ -30,6 +30,7 @@ class ApproveModal(discord.ui.Modal):
             return
         try:
             delta = int(self.answer.value)
+            db.add_submission(interaction.message)
             await award_points(self.entry_user, delta, interaction.message.guild.roles)
             embed = interaction.message.embeds[0]
             self.parent.view.clear_items()
