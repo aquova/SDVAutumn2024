@@ -18,24 +18,31 @@ class ApprovalButton(discord.ui.Button):
             return
         await award_points(self.entry_user, APPROVAL_POINTS, interaction.message.guild.roles)
         embed = interaction.message.embeds[0]
-        self.view.remove_item(self)
-        self.view.add_item(ApprovedButton())
+        self.view.clear_items()
+        self.view.add_item(discord.ui.Button(label="Approved!", style=discord.ButtonStyle.green, disabled=True))
         await interaction.message.edit(embed=embed, view=self.view)
         await interaction.response.defer()
 
-class ApprovedButton(discord.ui.Button):
-    def __init__(self):
-        super().__init__(label="Approved!", style=discord.ButtonStyle.success)
+class DenyButton(discord.ui.Button):
+    def __init__(self, entry_user: discord.Member):
+        self.entry_user = entry_user
+        super().__init__(label="Deny", style=discord.ButtonStyle.red)
 
-    # Need a dummy button so the interaction won't hang
     async def callback(self, interaction: discord.Interaction):
+        if interaction.message is None:
+            return
+        embed = interaction.message.embeds[0]
+        self.view.clear_items()
+        self.view.add_item(discord.ui.Button(label="Denied!", style=discord.ButtonStyle.red, disabled=True))
+        await interaction.message.edit(embed=embed, view=self.view)
+        await self.entry_user.send("We're sorry, but your submission been denied by the SDV staff. For additional info, please DM the Modmail bot.")
         await interaction.response.defer()
 
 class EntryView(discord.ui.View):
     def __init__(self, entry_user: discord.Member):
         super().__init__(timeout=None)
-        self.entry_user = entry_user
         self.add_item(ApprovalButton(entry_user))
+        self.add_item(DenyButton(entry_user))
 
 async def award_points(user: discord.Member, delta: int, available_roles: Sequence[discord.Role]):
     db.change_points(user, delta)
