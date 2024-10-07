@@ -24,6 +24,10 @@ async def on_message(message: discord.Message):
     if message.author == client.user:
         return
 
+    if isinstance(message.channel, discord.channel.DMChannel):
+        await message.channel.send("I am not the modmail bot.")
+        return
+
     if message.channel.id in REDIRECT_CHANNELS:
         dest = REDIRECT_CHANNELS[message.channel.id]
         channel = client.get_channel(dest)
