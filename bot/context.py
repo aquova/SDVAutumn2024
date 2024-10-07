@@ -43,23 +43,29 @@ async def stats_slash(interaction: discord.Interaction):
 
 @client.tree.context_menu(name="Send Trick")
 async def trick_message_context(interaction: discord.Interaction, message: discord.Message):
-    response = trick_treat_helper(interaction, message.author, Trick_Treat.TRICK)
-    await interaction.response.send_message(response, ephemeral=True)
+    if not message.author.bot:
+        response = trick_treat_helper(interaction, message.author, Trick_Treat.TRICK)
+        await message.add_reaction("🦇")
+        await interaction.response.send_message(response, ephemeral=True)
 
 @client.tree.context_menu(name="Send Trick")
 async def trick_user_context(interaction: discord.Interaction, user: discord.Member):
-    response = trick_treat_helper(interaction, user, Trick_Treat.TRICK)
-    await interaction.response.send_message(response, ephemeral=True)
+    if not user.bot:
+        response = trick_treat_helper(interaction, user, Trick_Treat.TRICK)
+        await interaction.response.send_message(response, ephemeral=True)
 
 @client.tree.context_menu(name="Send Treat")
 async def treat_message_context(interaction: discord.Interaction, message: discord.Message):
-    response = trick_treat_helper(interaction, message.author, Trick_Treat.TREAT)
-    await interaction.response.send_message(response, ephemeral=True)
+    if not message.author.bot:
+        response = trick_treat_helper(interaction, message.author, Trick_Treat.TREAT)
+        await message.add_reaction("🍬")
+        await interaction.response.send_message(response, ephemeral=True)
 
 @client.tree.context_menu(name="Send Treat")
 async def treat_user_context(interaction: discord.Interaction, user: discord.Member):
-    response = trick_treat_helper(interaction, user, Trick_Treat.TREAT)
-    await interaction.response.send_message(response, ephemeral=True)
+    if not user.bot:
+        response = trick_treat_helper(interaction, user, Trick_Treat.TREAT)
+        await interaction.response.send_message(response, ephemeral=True)
 
 def trick_treat_helper(interaction: discord.Interaction, target: discord.User | discord.Member, tot: Trick_Treat) -> str:
     word = "treat" if tot == Trick_Treat.TREAT else "trick"
