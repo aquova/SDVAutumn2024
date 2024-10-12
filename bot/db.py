@@ -69,6 +69,10 @@ def get_player(user: discord.User | discord.Member) -> Player:
     results = _db_read(user, query)
     return Player(results[0][0], results[0][1], results[0][2], results[0][3], results[0][4], results[0][5], results[0][6])
 
+def grant_tot(user: discord.Member, num: int):
+    query = ("UPDATE players SET tricks_remaining = tricks_remaining + ?, treats_remaining = treats_remaining + ? WHERE uid=?", [num, num, user.id])
+    _db_write(user, query)
+
 def has_tot(user: discord.User | discord.Member, tot: Trick_Treat) -> bool:
     player = get_player(user)
     if tot == Trick_Treat.TRICK:
