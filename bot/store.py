@@ -2,7 +2,7 @@ from ast import literal_eval
 
 import discord
 
-from config import STORE
+from config import STORE, TOT_ENABLED
 import db
 
 class EmojiItem(discord.SelectOption):
@@ -24,7 +24,8 @@ class TotItem(discord.SelectOption):
 class StoreWidget(discord.ui.Select):
     def __init__(self):
         options: list[discord.SelectOption] = [EmojiItem(i) for i in range(0, len(STORE))]
-        options.append(TotItem(cost=10, receive=5))
+        if TOT_ENABLED:
+            options.append(TotItem(cost=10, receive=5))
         super().__init__(custom_id="store_widget", options=options)
 
     async def callback(self, interaction: discord.Interaction):
