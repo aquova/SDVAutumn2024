@@ -1,9 +1,8 @@
 import discord
 import requests
-from typing import Sequence
 
-from config import EVENT_ROLES
 import db
+from utils import award_points
 
 FORWARD_URL = "https://catbox.moe/user/api.php"
 
@@ -60,15 +59,6 @@ class EntryView(discord.ui.View):
         super().__init__(timeout=None)
         self.add_item(ApprovalButton(entry_user))
         self.add_item(DenyButton(entry_user))
-
-async def award_points(user: discord.Member, delta: int, available_roles: Sequence[discord.Role]):
-    db.change_points(user, delta)
-    # If they've received points, we'll consider them in the event and award the event roles
-    for role_id in EVENT_ROLES:
-        if not user.get_role(role_id):
-            role = discord.utils.get(available_roles, id=role_id)
-            if role is not None:
-                await user.add_roles(role)
 
 async def post_entry(message: discord.Message, channel: discord.TextChannel):
     embed = discord.Embed(title=str(message.author), description=message.content, color=message.author.color)

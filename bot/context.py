@@ -1,6 +1,7 @@
 import discord
 
 from approval import award_points
+from award import AwardModal
 from client import client
 from config import LEADERBOARD_URL
 import db
@@ -12,6 +13,10 @@ from utils import Trick_Treat
 async def addpoints_slash(interaction: discord.Interaction, user: discord.Member, delta: int):
     await award_points(user, delta, interaction.user.guild.roles)
     await interaction.response.send_message(f"{delta} points have been given to {str(user)}", ephemeral=True)
+
+@client.tree.context_menu(name="Award Points")
+async def awardpoints_context(interaction: discord.Interaction, message: discord.Message):
+    await interaction.response.send_modal(AwardModal(message))
 
 @client.tree.command(name="leaderboard", description="Post the leaderboard for the event")
 async def leaderboard_slash(interaction: discord.Interaction):
