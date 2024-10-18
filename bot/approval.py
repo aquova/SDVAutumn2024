@@ -35,6 +35,7 @@ class ApproveModal(discord.ui.Modal):
             self.parent.view.clear_items()
             self.parent.view.add_item(discord.ui.Button(label="Approved!", style=discord.ButtonStyle.green, disabled=True))
             await interaction.message.edit(embed=embed, view=self.parent.view)
+            await self.entry_user.send("Your submission has been approved, well done!")
             await interaction.response.defer()
         except ValueError:
             await interaction.response.send_message(f"{self.answer.value} isn't a number, try again", ephemeral=True)
