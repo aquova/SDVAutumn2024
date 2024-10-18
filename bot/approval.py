@@ -62,17 +62,22 @@ class EntryView(discord.ui.View):
         self.add_item(DenyButton(entry_user))
 
 async def post_entry(message: discord.Message, channel: discord.TextChannel):
-    message_embed = discord.Embed(description=message.content, color=message.author.color)
-    message_embed.add_field(name="Submitter:", value=message.author.mention)
-    await channel.send(embed=message_embed, view=EntryView(message.author))
-
-    for i, attachment in enumerate(message.attachments):
-        embed = discord.Embed(description=f"Image submission {i + 1}", color=message.author.color)
-        embed.add_field(name="Submitter:", value=message.author.mention)
-        new_url = requests.post(FORWARD_URL, data={"reqtype": "urlupload", "url": attachment.url})
-        if new_url.ok:
-            embed.set_image(url=new_url.text)
-        else:
-            print(f"Something went wrong: {new_url.text}")
-        await channel.send(embed=embed, view=EntryView(message.author))
+    # Want submitted text to always appear in the first embedded entry, even if there are one or more image embeds too
+    if len(message.attachments) == 0:
+        message_embed = discord.Embed(description=message.content, color=message.author.color)
+        message_embed.add_field(name="Submitter:", value=message.author.mention)
+        await channel.send(embed=message_embed, view=EntryView(message.author))
+    else:
+        for i, attachment in enumerate(message.attachments):
+            if i == 0 and message.content != "":
+                embed = discord.Embed(description=message.content, color=message.author.color)
+            else:
+                embed = discord.Embed(description=f"Image submission {i + 1}", color=message.author.color)
+            embed.add_field(name="Submitter:", value=message.author.mention)
+            new_url = requests.post(FORWARD_URL, data={"reqtype": "urlupload", "url": attachment.url})
+            if new_url.ok:
+                embed.set_image(url=new_url.text)
+            else:
+                print(f"Something went wrong: {new_url.text}")
+            await channel.send(embed=embed, view=EntryView(message.author))
     await message.delete()
