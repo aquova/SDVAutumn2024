@@ -22,10 +22,10 @@ async def awardpoints_context(interaction: discord.Interaction, message: discord
 async def leaderboard_slash(interaction: discord.Interaction):
     await interaction.response.send_message(f"The event leaderboard can be viewed here: {LEADERBOARD_URL}")
 
-@client.tree.command(name="points", description="Show how many points you have")
-async def points_slash(interaction: discord.Interaction):
-    player = db.get_player(interaction.user)
-    await interaction.response.send_message(f"You have {player.points} points!", ephemeral=True)
+@client.tree.command(name="points", description="Show how many points a user has!")
+async def points_slash(interaction: discord.Interaction, user: discord.Member):
+    player = db.get_player(user)
+    await interaction.response.send_message(f"{user.mention} has {player.points} points!", ephemeral=True)
 
 @client.tree.command(name="poststore", description="Post the event store")
 @discord.app_commands.describe(channel="Channel to post in")
