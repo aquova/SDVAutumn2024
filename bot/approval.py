@@ -61,13 +61,17 @@ class EntryView(discord.ui.View):
         self.add_item(DenyButton(entry_user))
 
 async def post_entry(message: discord.Message, channel: discord.TextChannel):
-    embed = discord.Embed(description=message.content, color=message.author.color)
-    embed.add_field(name="Submitter:", value=message.author.mention)
-    if len(message.attachments) > 0:
-        new_url = requests.post(FORWARD_URL, data={"reqtype": "urlupload", "url": message.attachments[0].url})
+    message_embed = discord.Embed(description=message.content, color=message.author.color)
+    message_embed.add_field(name="Submitter:", value=message.author.mention)
+    await channel.send(embed=message_embed, view=EntryView(message.author))
+
+    for i, attachment in enumerate(message.attachments):
+        embed = discord.Embed(description=f"Image submission {i + 1}", color=message.author.color)
+        embed.add_field(name="Submitter:", value=message.author.mention)
+        new_url = requests.post(FORWARD_URL, data={"reqtype": "urlupload", "url": attachment.url})
         if new_url.ok:
             embed.set_image(url=new_url.text)
         else:
             print(f"Something went wrong: {new_url.text}")
-    await channel.send(embed=embed, view=EntryView(message.author))
+        await channel.send(embed=embed, view=EntryView(message.author))
     await message.delete()
