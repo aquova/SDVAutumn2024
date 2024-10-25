@@ -35,7 +35,10 @@ class ApproveModal(discord.ui.Modal):
             self.parent.view.clear_items()
             self.parent.view.add_item(discord.ui.Button(label="Approved!", style=discord.ButtonStyle.green, disabled=True))
             await interaction.message.edit(embed=embed, view=self.parent.view)
-            await self.entry_user.send("Your submission has been approved, well done!")
+            try:
+                await self.entry_user.send("Your submission has been approved, well done!")
+            except discord.errors.Forbidden:
+                pass
             await interaction.response.defer()
         except ValueError:
             await interaction.response.send_message(f"{self.answer.value} isn't a number, try again", ephemeral=True)
@@ -52,7 +55,10 @@ class DenyButton(discord.ui.Button):
         self.view.clear_items()
         self.view.add_item(discord.ui.Button(label="Denied!", style=discord.ButtonStyle.red, disabled=True))
         await interaction.message.edit(embed=embed, view=self.view)
-        await self.entry_user.send("We're sorry, but your submission been denied by the SDV staff. For additional info, please DM the Modmail bot.")
+        try:
+            await self.entry_user.send("We're sorry, but your submission been denied by the SDV staff. For additional info, please DM the Modmail bot.")
+        except discord.errors.Forbidden:
+            pass
         await interaction.response.defer()
 
 class EntryView(discord.ui.View):
