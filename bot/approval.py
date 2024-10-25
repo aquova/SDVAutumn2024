@@ -83,6 +83,7 @@ async def post_entry(message: discord.Message, channel: discord.TextChannel):
             new_url = requests.post(FORWARD_URL, data={"reqtype": "urlupload", "url": attachment.url})
             if new_url.ok:
                 embed.set_image(url=new_url.text)
+                embed.add_field(name="URL:", value=new_url.text)
             else:
                 print(f"Something went wrong: {new_url.text}")
             await channel.send(embed=embed, view=EntryView(message.author))
