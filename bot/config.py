@@ -12,5 +12,6 @@ DISCORD_KEY = cfg['discord']
 LEADERBOARD_URL = cfg['leaderboard']
 STORE = cfg['store']
 REDIRECT_CHANNELS = cfg['channels']['redirect']
+TOT_CHANNEL = cfg['channels']['tot']
 EVENT_ROLES = cfg['roles']['event']
 TOT_ENABLED = cfg['tot_enabled'] # The slash commands should still be disabled via Discord settings

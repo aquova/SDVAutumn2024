@@ -14,6 +14,7 @@ async def on_ready():
     if client.user:
         print(client.user.name)
         print(client.user.id)
+    await client.setup()
 
 @client.event
 async def on_guild_available(guild: discord.Guild):

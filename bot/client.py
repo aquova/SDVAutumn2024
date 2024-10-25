@@ -1,6 +1,9 @@
+from typing import cast
+
 import discord
 from discord.ext import commands
 
+from config import TOT_CHANNEL
 import db
 from store import StoreView
 
@@ -10,6 +13,9 @@ class DiscordClient(commands.Bot):
         # The command prefix is never used, but we have to have something
         super().__init__(command_prefix="$", intents=intents)
         db.initialize()
+
+    async def setup(self):
+        self.tot_log = cast(discord.TextChannel, self.get_channel(TOT_CHANNEL))
 
     async def sync_guild(self, guild: discord.Guild):
         import context
